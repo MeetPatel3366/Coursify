@@ -101,6 +101,23 @@ const logout = (req, res) => {
   });
 };
 
-const getProfile = (req, res) => {};
+const getProfile = async (req, res) => {
+  try
+  {
+    const userId=req.user.id;
+    const user=await User.findById(userId);
+
+    user.password = undefined;
+
+    res.status(200).json({
+      success:true,
+      message:"User details",
+      user
+    });
+  }
+  catch(err){
+    return next(new AppError('Fail to fetch profile detail',500))
+  }
+};
 
 export { register, login, logout, getProfile };
