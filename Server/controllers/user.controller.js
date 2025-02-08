@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import AppError from "../utils/error.util.js";
+import handleFileUpload from "../utils/file.util.js";
 
 const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000, //7 day
@@ -38,7 +39,10 @@ const register = async (req, res, next) => {
       );
     }
 
-    //Todo:File upload
+    //File upload
+    if (req.file) {
+      await handleFileUpload(req, user);
+    }
 
     await user.save();
 
@@ -58,11 +62,11 @@ const register = async (req, res, next) => {
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    if (!email && !password) {
+    if (!email || !password) {
       return next(new AppError("All fields are required", 400));
     }
 
@@ -101,22 +105,20 @@ const logout = (req, res) => {
   });
 };
 
-const getProfile = async (req, res) => {
-  try
-  {
-    const userId=req.user.id;
-    const user=await User.findById(userId);
+const getProfile = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
 
     user.password = undefined;
 
     res.status(200).json({
-      success:true,
-      message:"User details",
-      user
+      success: true,
+      message: "User details",
+      user,
     });
-  }
-  catch(err){
-    return next(new AppError('Fail to fetch profile detail',500))
+  } catch (err) {
+    return next(new AppError("Fail to fetch profile detail", 500));
   }
 };
 

@@ -24,11 +24,11 @@ app.use(cookieParser());
 
 app.use(morgan("dev"));
 
+app.use("/api/v1/user", userRoutes);
+
 app.use("/", (req, res) => {
   res.send("Learning Management System");
 });
-
-app.use("api/v1/user", userRoutes);
 
 app.all("*", (req, res) => {
   res.status(404).send("OOPS! 404 page not found");

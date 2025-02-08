@@ -30,7 +30,6 @@ const userSchema = new Schema(
       select: false,
     },
     avatar: {
-      type: "String",
       public_id: {
         type: "String",
       },
@@ -55,7 +54,7 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.pre("save", async (next) => {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
@@ -63,7 +62,7 @@ userSchema.pre("save", async (next) => {
 });
 
 userSchema.methods = {
-  generateJWTToken: async () => {
+  generateJWTToken: async function () {
     return await jwt.sign(
       {
         id: this._id,
