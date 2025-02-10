@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  forgotPassword,
   getProfile,
   login,
   logout,
@@ -14,5 +15,6 @@ router.post("/register", upload.single("avatar"), register);
 router.post("/login", login);
 router.get("/logout", logout);
 router.get("/me", isLoggedIn, getProfile);
+router.post("/forgot-password", forgotPassword);
 
 export default router;

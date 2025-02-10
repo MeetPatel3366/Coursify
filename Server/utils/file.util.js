@@ -1,5 +1,6 @@
 import cloudinary from "cloudinary";
 import fs from "fs";
+import AppError from "./error.util.js";
 
 const handleFileUpload = async (req, user) => {
   if (!req.file) return;
@@ -25,7 +26,9 @@ const handleFileUpload = async (req, user) => {
       });
     }
   } catch (err) {
-    throw new Error("File upload failed, please try again");
+    return next(
+      new AppError(err || "File not uploaded, please try again", 500)
+    );
   }
 };
 
