@@ -6,13 +6,18 @@ import morgan from "morgan";
 import userRoutes from "./routes/user.routes.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 
+// Load environment variables from .env file
 config();
 
 const app = express();
 
+// Middleware to parse incoming JSON requests
 app.use(express.json());
+
+// Middleware to parse URL-encoded data
 app.use(express.urlencoded({ extended: true }));
 
+// Enable CORS for frontend origin with credentials
 app.use(
   cors({
     origin: [process.env.FRONTEND_URL],
@@ -20,20 +25,26 @@ app.use(
   })
 );
 
+// Middleware to parse cookies from incoming requests
 app.use(cookieParser());
 
+// Logger middleware for request details in development mode
 app.use(morgan("dev"));
 
+// User-related routes
 app.use("/api/v1/user", userRoutes);
 
+// Base route for application status check
 app.use("/", (req, res) => {
   res.send("Learning Management System");
 });
 
+// Handle undefined routes with a 404 message
 app.all("*", (req, res) => {
   res.status(404).send("OOPS! 404 page not found");
 });
 
+// Global error handling middleware
 app.use(errorMiddleware);
 
 export default app;
