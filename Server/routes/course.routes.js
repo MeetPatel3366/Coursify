@@ -1,9 +1,14 @@
-import {Router} from "express";
+import { Router } from "express";
+import {
+  getAllCourses,
+  getLecturesByCourseId,
+} from "../controllers/course.controller.js";
+import { isLoggedIn } from "../middlewares/auth.middleware.js";
 
-const router=new Router();
+const router = new Router();
 
-router.get('/',getAllCourses);
+router.get("/", getAllCourses);
 
-router.get('/:id',getLecturesByCourseId);
+router.get("/:id", isLoggedIn, getLecturesByCourseId);
 
 export default router;
