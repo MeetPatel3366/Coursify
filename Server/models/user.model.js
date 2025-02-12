@@ -7,7 +7,7 @@ import crypto from "crypto";
 const userSchema = new Schema(
   {
     fullName: {
-      type: "String",
+      type: String,
       required: [true, "Name is required"], // Name is mandatory
       minLength: [5, "Name must be at least 5 characters"], // Minimum length validation
       maxLength: [35, "Name must be less than 25 characters"], // Maximum length validation
@@ -15,7 +15,7 @@ const userSchema = new Schema(
       trim: true, // Remove extra spaces
     },
     email: {
-      type: "String",
+      type: String,
       required: [true, "Email is required"], // Email is mandatory
       lowercase: true,
       trim: true,
@@ -26,29 +26,29 @@ const userSchema = new Schema(
       ],
     },
     password: {
-      type: "String",
+      type: String,
       required: [true, "Password is required"], // Password is mandatory
       minLength: [8, "Password must be at least 8 characters"], // Minimum length validation
       select: false, // Do not return password by default in queries
     },
     avatar: {
       public_id: {
-        type: "String",
+        type: String,
       },
       secure_url: {
-        type: "String",
+        type: String,
       },
     },
     role: {
-      type: "String",
+      type: String,
       enum: ["USER", "ADMIN"], // Restrict to defined roles
       default: "USER",
     },
     forgotPasswordToken: {
-      type: "String",
+      type: String,
     },
     forgotPasswordExpiry: {
-      type: "Date",
+      type: Date,
     },
   },
   {
