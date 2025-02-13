@@ -52,7 +52,7 @@ const register = async (req, res, next) => {
 
     // Handle optional file upload for avatar
     if (req.file) {
-      await handleFileUpload(req, user);
+      await handleFileUpload(req, user, "avatar");
     }
 
     await user.save();
@@ -300,7 +300,7 @@ const updateUser = async (req, res, next) => {
       // Delete the old avatar from Cloudinary
       await cloudinary.v2.uploader.destroy(user.avatar.public_id);
       // Upload the new avatar
-      await handleFileUpload(req, user);
+      await handleFileUpload(req, user, "avatar");
     }
 
     await user.save();
