@@ -1,5 +1,6 @@
 import Course from "../models/course.model.js";
 import AppError from "../utils/error.util.js";
+import handleFileUpload from "../utils/file.util.js";
 
 const getAllCourses = async (req, res, next) => {
   try {
@@ -35,4 +36,46 @@ const getLecturesByCourseId = async (req, res, next) => {
   }
 };
 
-export { getAllCourses, getLecturesByCourseId };
+const createCourse = async (req, res, next) => {
+  try {
+    const { title, description, category, createdBy } = req.body;
+
+    if (!title || !description || !category || !createdBy) {
+      return next(new AppError("All fields are required", 400));
+    }
+
+    const course = await Course.create({
+      title,
+      description,
+      category,
+      createdBy,
+      thumbnail: {
+        public_id: title,
+        secure_url:
+          "https://res.cloudinary.com/dyk3roggj/image/upload/v1739538302/lms/j4vc6n2nvm9hprijpnns.png",
+      },
+    });
+
+    if (!course) {
+      return next(
+        new AppError("Course could not create,please try again ", 500)
+      );
+    }
+
+    if (req.file) {
+      await handleFileUpload(req, course, "thumbnail");
+    }
+
+    await course.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Course created successfully",
+      course,
+    });
+  } catch (err) {
+    return next(new AppError(err.message, 500));
+  }
+};
+
+export { getAllCourses, getLecturesByCourseId, createCourse };
