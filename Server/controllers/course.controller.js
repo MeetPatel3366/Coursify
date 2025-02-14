@@ -102,26 +102,30 @@ const updateCourse = async (req, res, next) => {
   }
 };
 
-const removeCourse=async (req,res,next)=>{
-  try{  
-    const {id}=req.params;
+const removeCourse = async (req, res, next) => {
+  try {
+    const { id } = req.params;
 
-    const course=await Course.findByIdAndDelete(id);
+    const course = await Course.findByIdAndDelete(id);
 
-    if(!course)
-    {
-      return next(new AppError("Course with given id does not exist",404));
+    if (!course) {
+      return next(new AppError("Course with given id does not exist", 404));
     }
 
     res.status(200).json({
-      success:true,
-      message:"Course deleted successfully",
-      course
-    })
-  }catch(err)
-  {
-    return next(new AppError(err.message),500);
+      success: true,
+      message: "Course deleted successfully",
+      course,
+    });
+  } catch (err) {
+    return next(new AppError(err.message), 500);
   }
-}
+};
 
-export { getAllCourses, getLecturesByCourseId, createCourse, updateCourse,removeCourse };
+export {
+  getAllCourses,
+  getLecturesByCourseId,
+  createCourse,
+  updateCourse,
+  removeCourse,
+};
