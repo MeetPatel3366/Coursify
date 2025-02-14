@@ -3,6 +3,7 @@ import {
   createCourse,
   getAllCourses,
   getLecturesByCourseId,
+  removeCourse,
   updateCourse,
 } from "../controllers/course.controller.js";
 import { isLoggedIn } from "../middlewares/auth.middleware.js";
@@ -17,5 +18,7 @@ router.get("/:id", isLoggedIn, getLecturesByCourseId);
 router.post("/", upload.single("thumbnail"), createCourse);
 
 router.put("/:id", isLoggedIn, updateCourse);
+
+router.delete("/:id", isLoggedIn, removeCourse);
 
 export default router;
