@@ -122,10 +122,47 @@ const removeCourse = async (req, res, next) => {
   }
 };
 
+const addLectureToCourse = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { title, description } = req.body;
+
+    if (!title || !description) {
+      return next(new AppError("All fields are required", 400));
+    }
+
+    const course = await Course.findById(id);
+
+    if (!course) {
+      return next(new AppError("Course with given id does not exist", 404));
+    }
+
+    const lectureData = { title, description, lecture: "" };
+
+    if (req.file) {
+      await handleFileUpload(req, lectureData, "lecture");
+    }
+
+    course.lectures.push(lectureData);
+    course.numbersOfLectures = course.lectures.length;
+
+    await course.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Lecture successfully added",
+      course,
+    });
+  } catch (err) {
+    return next(new AppError(err.message, 500));
+  }
+};
+
 export {
   getAllCourses,
   getLecturesByCourseId,
   createCourse,
   updateCourse,
   removeCourse,
+  addLectureToCourse,
 };
