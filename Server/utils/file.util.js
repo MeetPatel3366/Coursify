@@ -2,7 +2,12 @@ import cloudinary from "cloudinary";
 import fs from "fs";
 import AppError from "./error.util.js";
 
-const handleFileUpload = async (req, entity, propertyName, fileType = "image") => {
+const handleFileUpload = async (
+  req,
+  entity,
+  propertyName,
+  fileType = "image"
+) => {
   if (!req.file) return;
 
   try {
@@ -15,7 +20,7 @@ const handleFileUpload = async (req, entity, propertyName, fileType = "image") =
         width: 250,
         height: 250,
         gravity: "faces",
-        crop: "fill"
+        crop: "fill",
       });
     } else if (fileType === "video") {
       Object.assign(uploadOptions, {
@@ -23,19 +28,22 @@ const handleFileUpload = async (req, entity, propertyName, fileType = "image") =
         transformation: [
           { width: 720, height: 480, crop: "limit" },
           { quality: "auto" },
-          { bit_rate: "800k" }
-        ]
+          { bit_rate: "800k" },
+        ],
       });
     }
 
     // Upload the file
-    const result = await cloudinary.v2.uploader.upload(req.file.path, uploadOptions);
+    const result = await cloudinary.v2.uploader.upload(
+      req.file.path,
+      uploadOptions
+    );
 
     if (result) {
       // Update entity with upload details
       entity[propertyName] = {
         public_id: result.public_id,
-        secure_url: result.secure_url
+        secure_url: result.secure_url,
       };
 
       // Delete local file
@@ -44,7 +52,10 @@ const handleFileUpload = async (req, entity, propertyName, fileType = "image") =
       });
     }
   } catch (err) {
-    throw new AppError(err.message || "File upload failed, please try again.", 500);
+    throw new AppError(
+      err.message || "File upload failed, please try again.",
+      500
+    );
   }
 };
 
