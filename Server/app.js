@@ -5,6 +5,7 @@ import { config } from "dotenv";
 import morgan from "morgan";
 import userRoutes from "./routes/user.routes.js";
 import courseRoutes from "./routes/course.routes.js";
+import paymentRoutes from "./routes/payment.routes.js"
 import errorMiddleware from "./middlewares/error.middleware.js";
 
 // Load environment variables from .env file
@@ -36,7 +37,10 @@ app.use(morgan("dev"));
 app.use("/api/v1/user", userRoutes);
 
 // Course-related routes
-app.use("/api/v1/courses",courseRoutes);
+app.use("/api/v1/courses", courseRoutes);
+
+//Payments-related routes
+app.use("/api/v1/payments", paymentRoutes);
 
 // Base route for application status check
 app.use("/", (req, res) => {
