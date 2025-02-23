@@ -50,6 +50,10 @@ const userSchema = new Schema(
     forgotPasswordExpiry: {
       type: Date,
     },
+    subscription: {
+      id: String,
+      status: String,
+    },
   },
   {
     timestamps: true, // Automatically add createdAt and updatedAt fields
@@ -91,7 +95,10 @@ userSchema.methods = {
     const resetToken = crypto.randomBytes(20).toString("hex");
 
     // Hash the token and set expiry for 15 minutes from now
-    this.forgotPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.forgotPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
     this.forgotPasswordExpiry = Date.now() + 15 * 60 * 1000;
 
     return resetToken; // Return the plain token to send to the user
