@@ -43,9 +43,9 @@ app.use("/api/v1/courses", courseRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 
 // Base route for application status check
-app.use("/", (req, res) => {
-  res.send("Learning Management System");
-});
+// app.use("/", (req, res) => {
+//   res.send("Learning Management System");
+// });
 
 // Handle undefined routes with a 404 message
 app.all("*", (req, res) => {
