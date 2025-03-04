@@ -55,7 +55,7 @@ const HomeLayout = ({ children }) => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <ul className="menu w-48 p-4 sm:w-80 bg-base-200 text-base-content relative">
+          <ul className="menu w-48 h-[100%] p-4 sm:w-80 bg-base-200 text-base-content relative">
             {/* Sidebar content here */}
             <li className="w-fit absolute right-2 z-50">
               <button>
@@ -83,12 +83,12 @@ const HomeLayout = ({ children }) => {
             </li>
 
             {!isLoggedIn && (
-              <li className="absolute bottom-0 w-[90%]">
+              <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center justify-center">
-                  <button className="px-4 py-1 font-semibold rounded-md">
+                  <button className="px-4 py-1 font-semibold rounded-md bg-purple-600">
                     <Link to="/login">Login</Link>
                   </button>
-                  <button className=" px-4 py-1 font-semibold rounded-md">
+                  <button className=" px-4 py-1 font-semibold rounded-md bg-pink-600">
                     <Link to="/login">Signup</Link>
                   </button>
                 </div>
@@ -96,7 +96,7 @@ const HomeLayout = ({ children }) => {
             )}
 
             {isLoggedIn && (
-              <li className="absolute bottom-0 w-[90%]">
+              <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center justify-center">
                   <button className="px-4 py-1 font-semibold rounded-md">
                     <Link to="/user/profile">profile</Link>
