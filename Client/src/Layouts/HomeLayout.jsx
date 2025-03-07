@@ -89,7 +89,7 @@ const HomeLayout = ({ children }) => {
                     <Link to="/login">Login</Link>
                   </button>
                   <button className=" px-4 py-1 font-semibold rounded-md bg-pink-600">
-                    <Link to="/login">Signup</Link>
+                    <Link to="/signup">Signup</Link>
                   </button>
                 </div>
               </li>
