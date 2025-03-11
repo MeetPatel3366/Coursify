@@ -98,10 +98,10 @@ const HomeLayout = ({ children }) => {
             {isLoggedIn && (
               <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center justify-center">
-                  <button className="px-4 py-1 font-semibold rounded-md">
+                  <button className="px-4 py-1 font-semibold rounded-md bg-purple-600">
                     <Link to="/user/profile">profile</Link>
                   </button>
-                  <button className=" px-4 py-1 font-semibold rounded-md">
+                  <button className=" px-4 py-1 font-semibold rounded-md bg-pink-600">
                     <Link onClick={handleLogout} to="/logout">
                       Logout
                     </Link>
