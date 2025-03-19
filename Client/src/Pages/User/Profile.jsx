@@ -46,13 +46,13 @@ const Profile = () => {
             </Link>
 
             <Link
-              to="/use/editProfile"
+              to="/user/editProfile"
               className="w-1/2 bg-yellow-600 hover:bg-yellow-500 transition-all duration-300 ease-in-out rounded-sm font-semibold py-2 cursor-pointer text-center"
             >
               <button>Edit Profile</button>
             </Link>
           </div>
-          
+
           {userData?.subscription?.status == "active" && (
             <button className="w-full bg-red-600 hover:bg-red-500 transition-all duration-300 ease-in-out rounded-sm font-semibold py-2 cursor-pointe">
               Cancel Subscription
