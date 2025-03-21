@@ -93,7 +93,7 @@ export const cancelCourseBundle = createAsyncThunk(
 const razorpaySlice = createSlice({
   name: "razorpay",
   initialState,
-  reducers,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getRazorPayId.fulfilled, (state, action) => {
