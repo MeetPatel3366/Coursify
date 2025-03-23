@@ -17,9 +17,7 @@ const Checkout = () => {
   const subscription_id = useSelector(
     (state) => state?.razorpay?.subscription_id
   );
-  const isPaymentVerified = useSelector(
-    (state) => state?.razorpay?.isPaymentVerified
-  );
+
   const userData = useSelector((state) => state?.auth?.data);
 
   const paymentDetails = {
@@ -57,6 +55,8 @@ const Checkout = () => {
         toast.success("Payment successfully");
 
         const res = await dispatch(verifyUserPayment(paymentDetails));
+        console.log(res);
+
         res?.payload?.success
           ? navigate("/checkout/success")
           : navigate("/checkout/fail");
