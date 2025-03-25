@@ -1,6 +1,6 @@
 import React from "react";
 import HomeLayout from "../../Layouts/HomeLayout";
-import { RxCrossCircled } from "react-icons/ai";
+import { RxCrossCircled } from "react-icons/rx";
 
 const CheckoutFailure = () => {
   return (

@@ -49,7 +49,7 @@ export const addCourseLectures = createAsyncThunk(
   }
 );
 
-export const deleteCourseLectures = createAsyncThunk(
+export const deleteCourseLecture = createAsyncThunk(
   "/course/lecture/delete",
   async (data) => {
     try {
