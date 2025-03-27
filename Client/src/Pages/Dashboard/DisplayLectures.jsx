@@ -19,9 +19,6 @@ const DisplayLectures = () => {
   const [currentVideo, setCurrentVideo] = useState(0);
 
   const handleDeleteLecture = async (courseId, lectureId) => {
-    console.log("course id : ", courseId);
-    console.log("l id : ", lectureId);
-
     await dispatch(deleteCourseLecture(courseId, lectureId));
     await dispatch(getCourseLectures(courseId));
   };
@@ -38,7 +35,7 @@ const DisplayLectures = () => {
           Course Name : {state?.title}
         </div>
 
-        {lectures && lectures.length > 0 && (
+        {lectures && lectures.length > 0 ? (
           <div className="flex justify-center gap-10 w-full">
             {/* left section for playing videos and displaying course details to admin */}
             <div className="space-y-5 w-[28rem] p-2  rounded-lg shadow-[0_0_10px_black]">
@@ -105,6 +102,17 @@ const DisplayLectures = () => {
                 })}
             </ul>
           </div>
+        ) : (
+          role == "ADMIN" && (
+            <button
+              onClick={() =>
+                navigate("/course/addlecture", { state: { ...state } })
+              }
+              className=" px-2 py-1 rounded-md font-semibold text-sm text-white bg-purple-600"
+            >
+              Add New Lecture
+            </button>
+          )
         )}
       </div>
     </HomeLayout>

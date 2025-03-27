@@ -141,7 +141,7 @@ const addLectureToCourse = async (req, res, next) => {
     const lectureData = { title, description, lecture: "" };
 
     if (req.file) {
-      await handleFileUpload(req, lectureData, "lecture", video);
+      await handleFileUpload(req, lectureData, "lecture", "video");
     }
 
     course.lectures.push(lectureData);
