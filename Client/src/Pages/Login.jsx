@@ -90,6 +90,12 @@ const Login = () => {
             Login
           </button>
 
+          <Link to="/forgotpassword">
+            <p className="text-center link text-accent cursor-pointer">
+              Forgot Password
+            </p>
+          </Link>
+
           <p className="text-center">
             Do not have an account ?{" "}
             <Link to="/signup" className="link text-accent cursor-pointer">

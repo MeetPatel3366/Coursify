@@ -83,6 +83,75 @@ export const getUserData = createAsyncThunk("/user/details", async () => {
   }
 });
 
+export const forgotPassword = createAsyncThunk(
+  "/user/forgotPassword",
+  async (email) => {
+    try {
+      const res = await toast.promise(
+        axiosInstance.post("user/forgot-password", { email }),
+        {
+          loading: "Loading...",
+          success: (data) => {
+            console.log("fp data: ", data);
+
+            return data?.data?.message;
+          },
+          error: "Failed to send verification email",
+        }
+      );
+
+      return res.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "/user/reset-password",
+  async (data) => {
+    try {
+      const res = await toast.promise(
+        axiosInstance.post(`/user/reset-password/${data.resetToken}`, {
+          password: data.password,
+        }),
+        {
+          loading: "Resetting...",
+          success: (data) => {
+            return data?.data?.message;
+          },
+          error: "Failed to reset passoword",
+        }
+      );
+
+      return res.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  }
+);
+
+export const changePassword = createAsyncThunk(
+  "/user/changePassoword",
+  async (userPassword) => {
+    try {
+      let res = await toast.promise(
+        axiosInstance.post("user/change-password", userPassword),
+        {
+          loading: "Loading in changing password...",
+          success: (data) => {
+            return data?.data?.message;
+          },
+          error: "Failed to change password",
+        }
+      );
+      return res.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,

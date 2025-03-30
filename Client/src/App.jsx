@@ -33,6 +33,8 @@ const App = () => {
       <Route path="/courses" element={<CourseList />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/denied" element={<Denied />} />
+      <Route path="/forgotpassword" element={<ForgotPassword />} />
+      <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
 
       <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
         <Route path="/course/create" element={<CreateCourse />} />
@@ -48,6 +50,7 @@ const App = () => {
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/checkout/fail" element={<CheckoutFailure />} />
         <Route path="/course/displaylecture" element={<DisplayLectures />} />
+        <Route path="/changePassword" element={<ChangePassword />} />
       </Route>
 
       <Route path="*" element={<NotFound />}></Route>
