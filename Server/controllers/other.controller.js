@@ -36,7 +36,7 @@ const userStats = async (req, res, next) => {
     "subscription.status": "active",
   });
 
-  req.status(200).json({
+  res.status(200).json({
     success: true,
     message: "All registered users count",
     allUsersCount,

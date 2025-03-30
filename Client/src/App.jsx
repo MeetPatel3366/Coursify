@@ -18,6 +18,10 @@ import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
 import CheckoutFailure from "./Pages/Payment/CheckoutFailure";
 import DisplayLectures from "./Pages/Dashboard/DisplayLectures";
 import AddLecture from "./Pages/Dashboard/AddLecture";
+import { AdminDashboard } from "./Pages/Dashboard/AdminDashboard";
+import ForgotPassword from "./Pages/Password/ForgotPassword";
+import ResetPassword from "./Pages/Password/ResetPassword";
+import ChangePassword from "./Pages/Password/ChangePassword";
 
 const App = () => {
   return (
@@ -29,16 +33,17 @@ const App = () => {
       <Route path="/courses" element={<CourseList />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/denied" element={<Denied />} />
-      <Route path="/course/description/" element={<CourseDescription />} />
 
       <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
         <Route path="/course/create" element={<CreateCourse />} />
         <Route path="/course/addlecture" element={<AddLecture />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Route>
 
       <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]} />}>
         <Route path="/user/profile" element={<Profile />} />
         <Route path="/user/editProfile" element={<EditProfile />} />
+        <Route path="/course/description/" element={<CourseDescription />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/checkout/fail" element={<CheckoutFailure />} />
