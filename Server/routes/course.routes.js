@@ -29,7 +29,13 @@ router.post(
   createCourse
 );
 
-router.put("/:id", isLoggedIn, authorizedRoles("ADMIN"), updateCourse);
+router.put(
+  "/:id",
+  isLoggedIn,
+  authorizedRoles("ADMIN"),
+  upload.single("thumbnail"),
+  updateCourse
+);
 
 router.delete("/:id", isLoggedIn, authorizedRoles("ADMIN"), removeCourse);
 

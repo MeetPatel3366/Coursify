@@ -84,6 +84,7 @@ const updateCourse = async (req, res, next) => {
     const { id } = req.params;
 
     const course = await Course.findByIdAndUpdate(
+      // You fetch and update in one step
       id,
       { $set: req.body },
       { runValidators: true, new: true }
@@ -91,6 +92,17 @@ const updateCourse = async (req, res, next) => {
 
     if (!course) {
       return next(new AppError("Course with given id does not exist", 500));
+    }
+
+    if (req.file) {
+      // Delete the old avatar from Cloudinary
+      if (course.thumbnail && course.thumbnail.public_id) {
+        // Add check if thumbnail exists
+        await cloudinary.v2.uploader.destroy(course.thumbnail.public_id);
+      }
+      // Upload the new avatar
+      await handleFileUpload(req, course, "thumbnail"); // <--- PASS THE 'course' OBJECT
+      await course.save(); // Save the updated thumbnail info
     }
 
     res.status(200).json({

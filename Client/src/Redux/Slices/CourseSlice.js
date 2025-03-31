@@ -58,6 +58,33 @@ export const deleteCourse = createAsyncThunk("/course/delete", async (id) => {
   }
 });
 
+export const updateCourse = createAsyncThunk("/course/update", async (data) => {
+  try {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("category", data.category);
+    formData.append("createdBy", data.createdBy);
+    formData.append("description", data.description);
+    if (data.thumbnail) {
+      formData.append("thumbnail", data.thumbnail);
+    }
+
+    const res = await toast.promise(
+      axiosInstance.put(`/courses/${data._id}`, formData),
+      {
+        loading: "Updating the course...",
+        success: "Course updated successfully",
+        error: "Failed to update course",
+      }
+    );
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    toast.error(error?.response?.data?.message);
+  }
+});
+
 const courseSlice = createSlice({
   name: "courses",
   initialState,

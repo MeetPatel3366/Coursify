@@ -22,6 +22,7 @@ import { AdminDashboard } from "./Pages/Dashboard/AdminDashboard";
 import ForgotPassword from "./Pages/Password/ForgotPassword";
 import ResetPassword from "./Pages/Password/ResetPassword";
 import ChangePassword from "./Pages/Password/ChangePassword";
+import UpdateCourse from "./Pages/Course/UpdateCourse";
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
 
       <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
         <Route path="/course/create" element={<CreateCourse />} />
+        <Route path="/course/update" element={<UpdateCourse />} />
         <Route path="/course/addlecture" element={<AddLecture />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Route>

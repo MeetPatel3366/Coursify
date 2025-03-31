@@ -20,6 +20,7 @@ import { FaUsers } from "react-icons/fa";
 import { FcSalesPerformance } from "react-icons/fc";
 import { GiMoneyStack } from "react-icons/gi";
 import { BsCollectionPlayFill, BsTrash } from "react-icons/bs";
+import { FaEdit } from "react-icons/fa";
 
 ChartJS.register(
   ArcElement,
@@ -220,6 +221,18 @@ export const AdminDashboard = () => {
                       >
                         <BsCollectionPlayFill />
                       </button>
+
+                      <button
+                        onClick={() =>
+                          navigate("/course/update", {
+                            state: { ...curCourse },
+                          })
+                        }
+                        className="bg-blue-500 hover:bg-blue-600 transition-all ease-in-out duration-300 text-xl py-2 px-4 rounded-md font-bold"
+                      >
+                        <FaEdit />
+                      </button>
+
                       <button
                         onClick={() => handleCourseDelete(curCourse?._id)}
                         className="bg-red-500 hover:bg-red-600 transition-all ease-in-out duration-300 text-xl py-2 px-4 rounded-md font-bold"
