@@ -1,30 +1,29 @@
 import path from "path";
 import multer from "multer";
 
-// Configure multer for file upload settings
+// Configure multer for handling file uploads
 const upload = multer({
-  // Directory where files will be temporarily stored
-  dest: "uploads/",
-
-  // Limit the file size to 50 MB
+  // Set maximum file size limit to 50 MB
   limits: { fileSize: 50 * 1024 * 1024 },
 
-  // Storage configuration to specify destination and file naming
+  // Use disk storage to save files to the filesystem
   storage: multer.diskStorage({
-    // Directory for storing uploaded files
-    destination: "uploads/",
+    // Set the destination folder for uploaded files
+    destination: function (req, file, cb) {
+      cb(null, "uploads/");
+    },
 
-    // Preserve the original filename for uploaded files
+    // Generate a unique filename by prepending a timestamp to the original name
     filename: (_req, file, cb) => {
-      cb(null, file.originalname);
+      cb(null, `${Date.now()}.${file.originalname}`);
     },
   }),
 
-  // File type validation to accept only specific formats
+  // Filter allowed file types before accepting the upload
   fileFilter: (_req, file, cb) => {
-    let ext = path.extname(file.originalname);
+    let ext = path.extname(file.originalname).toLowerCase(); // Normalize to lowercase
 
-    // Restrict to only specific file types (images and video)
+    // Allow only specific image and video file types
     if (
       ext !== ".jpg" &&
       ext !== ".jpeg" &&
@@ -32,10 +31,10 @@ const upload = multer({
       ext !== ".png" &&
       ext !== ".mp4"
     ) {
-      cb(new Error(`Unsupported file type! ${ext}`), false); // Reject unsupported file types
+      return cb(new Error(`Unsupported file type! ${ext}`), false); // Reject unsupported file types
     }
 
-    // Accept the file if the type is valid
+    // Accept the file if the extension is valid
     cb(null, true);
   },
 });
