@@ -30,7 +30,7 @@ const progressSchema = new Schema(
     ],
     lastAccessed: {
       type: Date,
-      default: Date.now(),
+      default: Date.now,
     },
   },
   {
