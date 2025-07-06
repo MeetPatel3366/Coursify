@@ -5,6 +5,7 @@ import { config } from "dotenv";
 import morgan from "morgan";
 import userRoutes from "./routes/user.routes.js";
 import courseRoutes from "./routes/course.routes.js";
+import progressRoutes from "./routes/progress.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import otherRoutes from "./routes/other.routes.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
@@ -42,6 +43,9 @@ app.use("/api/v1/courses", courseRoutes);
 
 //Payments-related routes
 app.use("/api/v1/payments", paymentRoutes);
+
+// Progress-related routes
+app.use("/api/v1/progress", progressRoutes);
 
 //Other routes
 app.use("/api/v1/other", otherRoutes);
