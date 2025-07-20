@@ -8,6 +8,7 @@ import {
   register,
   resetPassword,
   updateUser,
+  verifyUser,
 } from "../controllers/user.controller.js";
 import { isLoggedIn } from "../middlewares/auth.middleware.js";
 import upload from "../middlewares/multer.middleware.js";
@@ -16,6 +17,8 @@ const router = Router();
 
 // Route for user registration with avatar upload
 router.post("/register", upload.single("avatar"), register);
+
+router.get("/verify/:token", verifyUser);
 
 // Route for user login
 router.post("/login", login);

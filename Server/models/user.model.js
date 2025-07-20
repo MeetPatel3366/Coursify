@@ -44,6 +44,13 @@ const userSchema = new Schema(
       enum: ["USER", "ADMIN"], // Restrict to defined roles
       default: "USER",
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+    },
     forgotPasswordToken: {
       type: String,
     },

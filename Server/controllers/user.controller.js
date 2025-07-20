@@ -33,7 +33,7 @@ const register = async (req, res, next) => {
     }
 
     // Create a new user with default avatar
-    const user = await User.create({
+    const newUser = await User.create({
       fullName,
       email,
       password,
@@ -44,7 +44,7 @@ const register = async (req, res, next) => {
       },
     });
 
-    if (!user) {
+    if (!newUser) {
       return next(
         new AppError("User registration failed, please try again", 400)
       );
@@ -52,16 +52,25 @@ const register = async (req, res, next) => {
 
     // Handle optional file upload for avatar
     if (req.file) {
-      await handleFileUpload(req, user, "avatar");
+      await handleFileUpload(req, newUser, "avatar");
     }
 
-    await user.save();
+    // Generate JWT token
+    const token = await newUser.generateJWTToken();
+
+    newUser.verificationToken = token;
+
+    await newUser.save();
+
+    let subject = "Verify your email";
+    let message = `Please click on the following link
+        ${process.env.BASE_URL}/api/v1/user/verify/${token}
+      `;
+
+    await sendEmail(email, subject, message);
 
     // Remove password from the response
-    user.password = undefined;
-
-    // Generate JWT token
-    const token = await user.generateJWTToken();
+    newUser.password = undefined;
 
     // Set cookie with token
     res.cookie("token", token, cookieOptions);
@@ -69,7 +78,35 @@ const register = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "User registered successfully",
-      user,
+      newUser,
+    });
+  } catch (err) {
+    return next(new AppError(err.message, 500));
+  }
+};
+
+const verifyUser = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+
+    if (!token) {
+      return next(new AppError("Invalid verification token", 400));
+    }
+
+    const user = await User.findOne({ verificationToken: token });
+    if (!user) {
+      await next(new AppError("Invalid verification token", 400));
+    }
+
+    user.isVerified = true;
+
+    user.verificationToken = undefined;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Email verified successfully.",
     });
   } catch (err) {
     return next(new AppError(err.message, 500));
@@ -94,6 +131,10 @@ const login = async (req, res, next) => {
     // Validate user existence and password
     if (!user || !(await user.comparePassword(password))) {
       return next(new AppError("Email or Password does not match", 400));
+    }
+
+    if (!user.isVerified) {
+      return next(new AppError("Email is not verified please try again", 400));
     }
 
     // Generate JWT token
@@ -316,6 +357,7 @@ const updateUser = async (req, res, next) => {
 
 export {
   register,
+  verifyUser,
   login,
   logout,
   getProfile,
