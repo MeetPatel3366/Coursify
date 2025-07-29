@@ -32,7 +32,7 @@ const HomeLayout = ({ children }) => {
     e.preventDefault();
 
     const res = await dispatch(logout());
-    if (res?.payload?.success) navigate("/");
+    if (res?.payload?.success) navigate("/login");
   };
   return (
     <div className="min-h-[90vh]">

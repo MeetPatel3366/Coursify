@@ -35,6 +35,11 @@ const Login = () => {
 
     //dispatch login action
     const response = await dispatch(login(loginData));
+    if (response?.error?.message?.includes("Email is not verified")) {
+      toast.error("Please verify your email first.");
+      return;
+    }
+
     if (response?.payload?.success) {
       navigate("/");
     }

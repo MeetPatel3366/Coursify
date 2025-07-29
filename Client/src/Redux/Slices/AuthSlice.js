@@ -25,6 +25,23 @@ export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
     throw error;
   }
 });
+export const verifyEmail = createAsyncThunk("/auth/verify", async (data) => {
+  try {
+    const res = await toast.promise(
+      axiosInstance.get(`user/verify/${data.token}`),
+      {
+        loading: "Wait! verify your email...",
+        success: (res) => res?.data?.message || "Email Verified Successfully!",
+        error: (err) =>
+          err?.response?.data?.message || "Failed to create account",
+      }
+    );
+    return res.data;
+  } catch (error) {
+    toast.error(error?.response?.data?.message || "Something went wrong");
+    throw error;
+  }
+});
 export const login = createAsyncThunk("/auth/login", async (data) => {
   try {
     const res = await toast.promise(axiosInstance.post("user/login", data), {

@@ -63,9 +63,10 @@ const register = async (req, res, next) => {
     await newUser.save();
 
     let subject = "Verify your email";
-    let message = `Please click on the following link
-        ${process.env.BASE_URL}/api/v1/user/verify/${token}
-      `;
+    let message = `
+      Please click on the following link:
+      <a href="${process.env.FRONTEND_URL}/verify/${token}" target="_blank">verify</a>
+    `;
 
     await sendEmail(email, subject, message);
 

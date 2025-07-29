@@ -23,6 +23,7 @@ import ForgotPassword from "./Pages/Password/ForgotPassword";
 import ResetPassword from "./Pages/Password/ResetPassword";
 import ChangePassword from "./Pages/Password/ChangePassword";
 import UpdateCourse from "./Pages/Course/UpdateCourse";
+import EmailVerify from "./Pages/EmailVerify";
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/about" element={<AboutUs />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/verify/:token" element={<EmailVerify />} />
       <Route path="/login" element={<Login />} />
       <Route path="/courses" element={<CourseList />} />
       <Route path="/contact" element={<Contact />} />

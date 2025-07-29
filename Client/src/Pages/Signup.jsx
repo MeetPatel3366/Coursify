@@ -51,7 +51,7 @@ const Signup = () => {
 
     const { fullName, email, password, avatar } = signupData;
 
-    if (!fullName || !email || !password || !avatar) {
+    if (!fullName || !email || !password) {
       toast.error("Please fill all the deatils");
       return;
     }
@@ -85,7 +85,8 @@ const Signup = () => {
     //dispatch create account action
     const response = await dispatch(createAccount(formData));
     if (response?.payload?.success) {
-      navigate("/");
+      toast.success("Account created! Please verify your email before logging in.");
+      // navigate("/verify/:token");
     }
     setSignupData({ fullName: "", email: "", password: "", avatar: "" });
     setPreviewImage("");
