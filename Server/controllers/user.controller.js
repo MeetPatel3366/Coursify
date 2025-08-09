@@ -1,9 +1,13 @@
 import User from "../models/user.model.js";
+import OauthAccount from "../models/oauthAccount.model.js";
 import AppError from "../utils/error.util.js";
 import handleFileUpload from "../utils/file.util.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
 import cloudinary from "cloudinary";
+import { google } from "../utils/oauth/google.js";
+import mongoose from "mongoose";
+import { decodeIdToken, generateCodeVerifier, generateState } from "arctic";
 
 // Cookie configuration options
 const cookieOptions = {
@@ -155,6 +159,143 @@ const login = async (req, res, next) => {
   } catch (err) {
     return next(new AppError(err.message, 500));
   }
+};
+
+const getGoogleLoginPage = async (req, res, next) => {
+  const state = generateState();
+  const codeVerfier = generateCodeVerifier();
+
+  const url = google.createAuthorizationURL(state, codeVerfier, [
+    "openid", //this is called scops, here we are giving openid, and profile
+    "profile", //openid gives tokens if needed, and profile gives user information
+    //we are telling google about the information that we require from user.
+    "email",
+  ]);
+
+  const cookieConfig = {
+    httpOnly: true,
+    // secure:true,
+    secure: false,
+    maxAge: 10 * 60 * 1000,
+    sameSite: "lax", //this is such that when google redirects to our website, cookies are maintained
+  };
+
+  res.cookie("google_oauth_state", state, cookieConfig);
+  res.cookie("google_code_verifier", codeVerfier, cookieConfig);
+
+  res.redirect(url.toString());
+};
+
+const getGoogleLoginCallback = async (req, res, next) => {
+  //google redirect with code, and state in query params
+  //we will use code to find out the user
+  const { code, state } = req.query;
+
+  const {
+    google_oauth_state: storedState,
+    google_code_verifier: codeVerifier,
+  } = req.cookies;
+
+  if (
+    !code ||
+    !state ||
+    !storedState ||
+    !codeVerifier ||
+    state != storedState
+  ) {
+    res.redirect(`${process.env.FRONTEND_URL}/login`);
+    return next(
+      new AppError(
+        "Couldn't login with Google because of invalid login attempt. Please try again!",
+        400
+      )
+    );
+  }
+
+  let tokens;
+  try {
+    // artic will verify the code given by google with code verifier internally
+    tokens = await google.validateAuthorizationCode(code, codeVerifier);
+  } catch {
+    res.redirect(`${process.env.FRONTEND_URL}/login`);
+    return next(
+      new AppError(
+        "Couldn't login with Google because of invalid login attempt. Please try again!",
+        400
+      )
+    );
+  }
+
+  const claims = decodeIdToken(tokens.idToken());
+  const { sub: googleUserId, name, email } = claims;
+
+  //there are few things that we should do
+  //condition 1: User already exists with google's auth linked
+  //condition 2: User already exists with the same email but google's oauth isn't linked
+  //condition 3: User doesn't exists.
+
+  // Find user with this email
+  let user = await User.findOne({ email });
+  let linkedAccount = null;
+
+  // 1. If user exists, check if OAuth account is linked
+  if (user) {
+    linkedAccount = await OauthAccount.findOne({
+      userId: user._id,
+      provider: "google",
+    }).lean();
+
+    // 2. User already exists with the same email but google's oauth isn't linked , create a new OAuth account entry
+    if (!linkedAccount) {
+      await OauthAccount.create({
+        userId: user._id,
+        provider: "google",
+        providerAccountId: googleUserId,
+      });
+    }
+  }
+
+  // 3. If user does not exist, create user + oauth account without transaction
+  if (!user) {
+    // generate a dummy random password
+    const dummyPassword = crypto.randomBytes(16).toString("hex");
+
+    const createdUser = await User.create({
+      fullName: name,
+      email,
+      password: dummyPassword,
+      isVerified: true, //OAuth emails are trusted
+      avatar: {
+        public_id: email,
+        secure_url:
+          "https://res.cloudinary.com/du9jzqlpt/image/upload/v1674647316/avatar_drzgxv.jpg",
+      },
+    });
+
+    await OauthAccount.create({
+      userId: createdUser._id,
+      provider: "google",
+      providerAccountId: googleUserId,
+    });
+
+    user = createdUser;
+
+    const token = await user.generateJWTToken();
+    user.verificationToken = token;
+    await user.save();
+  }
+  const token = await user.generateJWTToken();
+
+  // Set HTTP-only cookie
+  res.cookie("token", token, {
+    httpOnly: true, // JS can't read cookie (secure)
+    secure: false, // true in production with HTTPS
+    sameSite: "lax", // send cookies on same site and OAuth redirect
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
+  // Redirect frontend (no query string needed)
+  return res.redirect(`${process.env.FRONTEND_URL}/auth/success`);
 };
 
 /*
@@ -360,6 +501,8 @@ export {
   register,
   verifyUser,
   login,
+  getGoogleLoginPage,
+  getGoogleLoginCallback,
   logout,
   getProfile,
   forgotPassword,

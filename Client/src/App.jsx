@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import AboutUs from "./Pages/AboutUs";
@@ -24,6 +24,7 @@ import ResetPassword from "./Pages/Password/ResetPassword";
 import ChangePassword from "./Pages/Password/ChangePassword";
 import UpdateCourse from "./Pages/Course/UpdateCourse";
 import EmailVerify from "./Pages/EmailVerify";
+import AuthSuccess from "./Pages/AuthSuccess";
 
 const App = () => {
   return (
@@ -33,6 +34,8 @@ const App = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/verify/:token" element={<EmailVerify />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/auth/success" element={<AuthSuccess />} />
+
       <Route path="/courses" element={<CourseList />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/denied" element={<Denied />} />

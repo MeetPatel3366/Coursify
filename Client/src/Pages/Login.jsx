@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import { login } from "../Redux/Slices/AuthSlice";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,6 @@ const Login = () => {
 
   const handleUserInput = (event) => {
     const { name, value } = event.target;
-
     setLoginData({
       ...loginData,
       [name]: value,
@@ -25,25 +25,25 @@ const Login = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
     const { email, password } = loginData;
-
     if (!email || !password) {
-      toast.error("Please fill all the deatils");
+      toast.error("Please fill all the details");
       return;
     }
-
-    //dispatch login action
     const response = await dispatch(login(loginData));
     if (response?.error?.message?.includes("Email is not verified")) {
       toast.error("Please verify your email first.");
       return;
     }
-
     if (response?.payload?.success) {
       navigate("/");
     }
     setLoginData({ email: "", password: "" });
+  };
+
+  const handleGoogleLogin = () => {
+    // Redirect the browser to your backend endpoint
+    window.location.href = "http://localhost:5001/api/v1/user/google";
   };
 
   return (
@@ -93,6 +93,15 @@ const Login = () => {
             className="bg-yellow-600 hover:bg-yellow-500 transition-all ease-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer mt-2"
           >
             Login
+          </button>
+
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="flex items-center justify-center gap-2 border rounded-sm py-2 font-semibold text-lg cursor-pointer bg-white text-black hover:bg-gray-100 transition-all duration-300"
+          >
+            <FcGoogle size={24} />
+            Sign in with Google
           </button>
 
           <Link to="/forgotpassword">

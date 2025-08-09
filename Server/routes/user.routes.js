@@ -2,6 +2,8 @@ import { Router } from "express";
 import {
   changePassword,
   forgotPassword,
+  getGoogleLoginCallback,
+  getGoogleLoginPage,
   getProfile,
   login,
   logout,
@@ -22,6 +24,10 @@ router.get("/verify/:token", verifyUser);
 
 // Route for user login
 router.post("/login", login);
+
+router.get("/google", getGoogleLoginPage);
+
+router.route("/google/callback").get(getGoogleLoginCallback);
 
 // Route to log out the user and clear authentication token
 router.get("/logout", logout);
