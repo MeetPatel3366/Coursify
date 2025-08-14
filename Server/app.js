@@ -9,6 +9,7 @@ import progressRoutes from "./routes/progress.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import otherRoutes from "./routes/other.routes.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
+import { apiLimiter } from "./middlewares/rateLimiter.middleware.js";
 
 // Load environment variables from .env file
 config();
@@ -34,6 +35,9 @@ app.use(cookieParser());
 
 // Logger middleware for request details in development mode
 app.use(morgan("dev"));
+
+// Rate limiting middleware (optional, can be added for security)
+app.use("/api/v1", apiLimiter);
 
 // User-related routes
 app.use("/api/v1/user", userRoutes);
