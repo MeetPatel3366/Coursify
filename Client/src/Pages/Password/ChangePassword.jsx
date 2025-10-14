@@ -5,6 +5,7 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import { changePassword } from "../../Redux/Slices/AuthSlice";
+import ActionButton from "../../Components/ActionButton";
 
 const ChangePassword = () => {
   const dispatch = useDispatch();
@@ -101,12 +102,16 @@ const ChangePassword = () => {
             </p>
           </Link>
 
-          <button
+          {/* <button
             type="submit"
             className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer"
           >
             Change Password
-          </button>
+          </button> */}
+          <ActionButton
+            label="Change Password"
+            className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer"
+          />
         </form>
       </div>
     </HomeLayout>

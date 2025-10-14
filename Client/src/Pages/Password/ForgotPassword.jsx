@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { forgotPassword } from "../../Redux/Slices/AuthSlice";
+import ActionButton from "../../Components/ActionButton";
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
@@ -52,12 +53,17 @@ const ForgotPassword = () => {
             />
           </div>
 
-          <button
+          {/* <button
             type="submit"
             className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer"
           >
             Get Verification Link
-          </button>
+          </button> */}
+          <ActionButton
+            type="submit"
+            label="Get Verification Link"
+            className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer"
+          />
 
           <p>
             Already have an account ?{" "}

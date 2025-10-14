@@ -14,6 +14,16 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (cooldown > 0) {
+      const timer = setInterval(() => {
+        setCooldown((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [cooldown]);
 
   const handleUserInput = (event) => {
     const { name, value } = event.target;
@@ -31,6 +41,14 @@ const Login = () => {
       return;
     }
     const response = await dispatch(login(loginData));
+
+    // Rate limit handling
+    if (response?.error?.message?.includes("Too many login attempts")) {
+      const retrySeconds = parseInt(response?.error?.message.match(/\d+/)?.[0]) || 0;
+      if (retrySeconds) setCooldown(retrySeconds);
+      return;
+    }
+
     if (response?.error?.message?.includes("Email is not verified")) {
       toast.error("Please verify your email first.");
       return;
@@ -90,9 +108,10 @@ const Login = () => {
 
           <button
             type="submit"
-            className="bg-yellow-600 hover:bg-yellow-500 transition-all ease-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer mt-2"
+            disabled={cooldown > 0}
+            className="bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all ease-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer mt-2"
           >
-            Login
+            {cooldown > 0 ? `Try again in ${cooldown}s` : "Login"}
           </button>
 
           <button

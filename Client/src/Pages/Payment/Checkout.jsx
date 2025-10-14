@@ -9,6 +9,7 @@ import {
 import toast from "react-hot-toast";
 import HomeLayout from "../../Layouts/HomeLayout";
 import { BiRupee } from "react-icons/bi";
+import ActionButton from "../../Components/ActionButton";
 
 const Checkout = () => {
   const dispatch = useDispatch();
@@ -104,12 +105,17 @@ const Checkout = () => {
               <p>* Terms and condition applied *</p>
             </div>
 
-            <button
+            {/* <button
               type="submit"
               className="bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-300 absolute bottom-0 w-full left-0 text-xl font-bold rounded-br-lg rounded-bl-lg py-2"
             >
               Buy Now
-            </button>
+            </button> */}
+            <ActionButton
+              type="submit"
+              label="Buy Now"
+              className="bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-300 absolute bottom-0 w-full left-0 text-xl font-bold rounded-br-lg rounded-bl-lg py-2"
+            />
           </div>
         </div>
       </form>

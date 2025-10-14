@@ -5,6 +5,7 @@ import razorpaySliceReducer from "./Slices/RazorpaySlice";
 import lectureSliceReducer from "./Slices/LectureSlice";
 import statSliceReducer from "./Slices/StatSlice";
 import progressSliceReducer from "./Slices/ProgressSlice";
+import rateLimitReducer from "./Slices/rateLimitSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     lecture: lectureSliceReducer,
     stat: statSliceReducer,
     progress: progressSliceReducer,
+    rateLimit: rateLimitReducer,
   },
   devTools: true,
 });

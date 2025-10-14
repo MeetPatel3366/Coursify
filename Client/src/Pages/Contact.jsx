@@ -3,6 +3,7 @@ import HomeLayout from "../Layouts/HomeLayout";
 import toast from "react-hot-toast";
 import { isEmail } from "../Helpers/regexMatcher";
 import axiosInstance from "../Helpers/axiosInstance";
+import ActionButton from "../Components/ActionButton";
 
 const Contact = () => {
   const [userInput, setUserInput] = useState({
@@ -111,12 +112,18 @@ const Contact = () => {
             />
           </div>
 
-          <button
+          {/* <button
             type="submit"
             className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-100 rounded-sm py-2 font-semibold text-lg cursor-pointer"
           >
             Submit
-          </button>
+          </button> */}
+          <ActionButton
+            type="submit"
+            label="Submit"
+            className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-100 rounded-sm py-2 font-semibold text-lg cursor-pointer"
+          />
+
         </form>
       </div>
     </HomeLayout>

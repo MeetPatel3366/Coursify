@@ -47,11 +47,28 @@ export const login = createAsyncThunk("/auth/login", async (data) => {
     const res = await toast.promise(axiosInstance.post("user/login", data), {
       loading: "Wait! authentication in progress...",
       success: (res) => res?.data?.message || "Login successfully",
-      error: (err) => err?.response?.data?.message || "Failed to login",
+      error: (err) => {
+        if (err?.response?.status === 429) {
+          const retryAfter = err?.response?.headers["retry-after"];
+          return retryAfter
+            ? `Too many login attempts! Please try again in ${retryAfter} seconds.`
+            : "Too many login attempts! Please try again later.";
+        }
+       return err?.response?.data?.message || "Failed to login";
+      },
     });
     return res.data;
   } catch (error) {
-    toast.error(error?.response?.data?.message || "Something went wrong");
+    if (error?.response?.status === 429) {
+      const retryAfter = error?.response?.headers["retry-after"];
+      toast.error(
+        retryAfter
+          ? `Too many login attempts! Try again in ${retryAfter} seconds.`
+          : "Too many login attempts! Please try again later."
+      );
+    } else {
+      toast.error(error?.response?.data?.message || "Something went wrong");
+    }
     throw error;
   }
 });

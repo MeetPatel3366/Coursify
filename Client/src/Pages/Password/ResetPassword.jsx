@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../../Redux/Slices/AuthSlice";
+import ActionButton from "../../Components/ActionButton";
 
 const ResetPassword = () => {
   const dispatch = useDispatch();
@@ -89,12 +90,18 @@ const ResetPassword = () => {
             />
           </div>
 
-          <button
+          {/* <button
             type="submit"
             className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer"
           >
             Reset Password
-          </button>
+          </button> */}
+          <ActionButton
+            type="submit"
+            label="Reset Password"
+            className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer"
+          />
+
         </form>
       </div>
     </HomeLayout>

@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import { createAccount } from "../Redux/Slices/AuthSlice";
 import { isEmail, isValidPassword } from "../Helpers/regexMatcher";
+import ActionButton from "../Components/ActionButton";
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -170,12 +171,16 @@ const Signup = () => {
             />
           </div>
 
-          <button
+          {/* <button
             type="submit"
             className="bg-yellow-600 hover:bg-yellow-500 transition-all ease-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer mt-2"
           >
             Create Account
-          </button>
+          </button> */}
+          <ActionButton
+            label="Create Account"
+            className="bg-yellow-600 hover:bg-yellow-500 transition-all ease-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer mt-2"
+          />
 
           <p className="text-center">
             Already have an account ?{" "}
